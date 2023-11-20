@@ -4,13 +4,13 @@ on:
   pull_request:
 
 permissions:
+  id-token: write
   contents: read
 
 jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
-    environment: production
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, 
     # or windows-latest.
@@ -19,7 +19,7 @@ jobs:
         shell: bash
 
     steps:
-      # Configure AWS credentials
+      # Configure AWS credentials for the Sandbox account
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
