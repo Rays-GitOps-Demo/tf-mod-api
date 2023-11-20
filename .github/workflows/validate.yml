@@ -19,6 +19,14 @@ jobs:
         shell: bash
 
     steps:
+      # Configure AWS credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::464499752602:role/CI-CD
+          aws-region: us-east-1
+
+
       # Checkout the repository to the GitHub Actions runner.
       - name: Checkout
         uses: actions/checkout@v3
@@ -43,12 +51,11 @@ jobs:
         working-directory: ./terraform
         run: terraform validate
 
-      # TODO: Requires credentials to a sandbox environment.
       # Apply the test HCL to a sandbox environment. Destroy afterwards.
-      #- name: Terraform Apply
-      #  working-directory: ./test
-      #  run: |
-      #    terraform init
-      #    terraform destroy --auto-approve
-      #    terraform apply --auto-approve
-      #    terraform destroy --auto-approve
+      - name: Terraform Apply
+        working-directory: ./test
+        run: |
+          terraform init
+          terraform destroy --auto-approve
+          terraform apply --auto-approve
+          terraform destroy --auto-approve
